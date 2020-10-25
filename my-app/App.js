@@ -48,12 +48,128 @@ class Clock extends React.Component {
   }
 }
 
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isToggleOn: true,
+    };
+
+    // this binding is necessary to make 'this' work in the callback
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState(state => ({
+      isToggleOn: !state.isToggleOn,
+    }));
+  }
+
+  render() {
+    return (
+      <TouchableOpacity
+        onPress = {this.handleClick}
+        style = {styles.button}
+      >
+        <Text style = {styles.buttonText}>{this.state.isToggleOn ? 'ON' : 'OFF'}</Text>
+      </TouchableOpacity>
+    );
+  }
+}
+
+function UserGreeting(props) {
+  return <Text>Welcome back!</Text>
+}
+
+function GuestGreeting(props) {
+  return <Text>Please sign up.</Text>
+}
+
+function Greeting(props) {
+  const isLoggedIn = props.isLoggedIn;
+  if (isLoggedIn) {
+    return <UserGreeting />
+  }
+  return <GuestGreeting />
+}
+
+function LoginButton(props) {
+  return (
+    <TouchableOpacity
+      onPress = {props.onPress}
+      style = {styles.button}
+    >
+      <Text style={styles.buttonText}>Login</Text>
+    </TouchableOpacity>
+  );
+}
+
+function LogoutButton(props) {
+  return (
+    <TouchableOpacity
+      onPress = {props.onPress}
+      style = {styles.button}
+    >
+      <Text style={styles.buttonText}>Logout</Text>
+    </TouchableOpacity>
+  );
+}
+
+class LoginControl extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    this.state = {
+      isLoggedIn: false,
+    }
+  }
+
+  handleLoginClick() {
+    this.setState({isLoggedIn: true});
+  }
+
+  handleLogoutClick() {
+    this.setState({isLoggedIn: false});
+  }
+
+  render() {
+    const isLoggedIn = this.state.isLoggedIn;
+    let button;
+    if (isLoggedIn) {
+      button = <LogoutButton onPress={this.handleLogoutClick} />
+    } else {
+      button = <LoginButton onPress = {this.handleLoginClick} />
+    }
+
+    return (
+      <>
+        <Greeting isLoggedIn = {isLoggedIn} />
+        {button}
+        <Text>The user is {isLoggedIn ? 'currently' : 'not'} logged in.</Text>
+      </>
+    );
+  }
+}
+
 export default class App extends React.Component {
+  handleClick(e) {
+    e.preventDefault();
+    alert('hi!');
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Welcome name = "Sarah" />
+        <Welcome name = "Stacia" />
         <Clock />
+        <TouchableOpacity
+          onPress = {this.handleClick}
+          style = {styles.button}>
+          <Text style = {styles.buttonText}>press me!</Text>
+        </TouchableOpacity>
+        <Toggle />
+        <LoginControl />
       </View>
     );
   }
