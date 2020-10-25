@@ -6,7 +6,58 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 
-export default function App() {
+class Welcome extends React.Component {
+  render() {
+    return (
+      <Text style = {styles.instructions}>
+        Hello, {this.props.name}
+      </Text>
+    );
+  }
+}
+
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: new Date(),
+    };
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  render(){
+    return (
+      <Text style = {styles.instructions}>It is {this.state.date.toLocaleTimeString()}.</Text>
+    );
+  }
+}
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Welcome name = "Sarah" />
+        <Clock />
+      </View>
+    );
+  }
+/*
   const [selectedImage, setSelectedImage] = React.useState(null);
 
   let openImagePickerAsync = async () => {
@@ -70,6 +121,7 @@ export default function App() {
       </TouchableOpacity>
     </View>
   );
+*/
 }
 
 const styles = StyleSheet.create({
